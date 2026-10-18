@@ -11,6 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "lovesa",
   description: "Organiza tus metas de relación",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({

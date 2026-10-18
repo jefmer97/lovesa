@@ -29,6 +29,11 @@ export default function TimelinePage() {
   useEffect(() => {
     if (!loading && !user) router.push('/login');
     if (user) fetchEvents();
+    const handleRefresh = () => {
+      if (user) fetchEvents();
+    };
+    window.addEventListener('lovesa:data-updated', handleRefresh);
+    return () => window.removeEventListener('lovesa:data-updated', handleRefresh);
   }, [user, loading, router]);
 
   const fetchEvents = async () => {

@@ -20,6 +20,11 @@ export default function IdeasPage() {
   useEffect(() => {
     if (!loading && !user) router.push('/login');
     if (user) fetchIdeas();
+    const handleRefresh = () => {
+      if (user) fetchIdeas();
+    };
+    window.addEventListener('lovesa:data-updated', handleRefresh);
+    return () => window.removeEventListener('lovesa:data-updated', handleRefresh);
   }, [user, loading, router]);
 
   const fetchIdeas = async () => {

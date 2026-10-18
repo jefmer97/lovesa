@@ -12,6 +12,8 @@ import { UploadController } from './upload.controller';
 import { User, UserSchema } from './schemas/user.schema';
 import { Activity, ActivitySchema } from './schemas/activity.schema';
 import { Idea, IdeaSchema } from './schemas/idea.schema';
+import { NotificationsModule } from './notifications/notifications.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { Idea, IdeaSchema } from './schemas/idea.schema';
     AuthModule,
     ActivitiesModule,
     IdeasModule,
+    NotificationsModule,
+    AiModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService],
