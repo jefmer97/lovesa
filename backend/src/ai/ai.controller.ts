@@ -14,4 +14,12 @@ export class AiController {
   ) {
     return this.aiService.chat(req.user.userId, body.messages || []);
   }
+
+  @Post('transcribe')
+  async transcribe(
+    @Body() body: { audioBase64?: string; mimeType?: string; audioDataUrl?: string },
+  ) {
+    return this.aiService.transcribeAudio(body);
+  }
 }
+

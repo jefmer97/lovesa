@@ -686,4 +686,91 @@ ${remindersSummary}
       actionsPerformed,
     };
   }
+
+  async transcribeAudio(body: {
+    audioBase64?: string;
+    mimeType?: string;
+    audioDataUrl?: string;
+  }): Promise<{ text: string }> {
+    try {
+      let base64Data = body.audioBase64 || '';
+      let rawMimeType = body.mimeType || 'audio/webm';
+
+      if (body.audioDataUrl && body.audioDataUrl.includes('base64,')) {
+        const [header, b64] = body.audioDataUrl.split('base64,');
+        base64Data = b64;
+        const mimeMatch = header.match(/data:([^;]+)/);
+        if (mimeMatch && mimeMatch[1]) {
+          rawMimeType = mimeMatch[1];
+        }
+      }
+
+      if (!base64Data) {
+        return { text: '' };
+      }
+
+      const cleanMimeType = rawMimeType.split(';')[0].trim() || 'audio/webm';
+      const apiKey =
+        process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+        process.env.GEMINI_API_KEY ||
+        DEFAULT_GEMINI_KEY;
+
+      const prompt = `Eres un transcriptor experto de notas de voz en español latinoamericano (Panamá) para la app personal de relación de Jeff (Jeffreey) y Dei (Deilyn).
+Transcribe con exactitud lo que dice el usuario en el audio adjunto.
+REGLAS ESTRICTAS:
+- Transcribe fielmente nombres propios ("Dei", "Deilyn", "Jeff", "Jeffreey", "Brisas del Golf", "Paitilla", "Casco Antiguo", "Causeway", "Cerro Azul", "Boquete", "San Blas"), fechas, horas, recordatorios, ideas o actividades mencionadas.
+- Conserva el tono y las palabras originales del usuario con puntuación clara.
+- Devuelve ÚNICAMENTE el texto transcrito. NO agregues introducciones, comentarios, ni comillas alrededor.
+- Si el audio está completamente vacío o solo es silencio o estática ininteligible, devuelve exactamente una cadena vacía.`;
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: 'user',
+                parts: [
+                  {
+                    inlineData: {
+                      mimeType: cleanMimeType,
+                      data: base64Data,
+                    },
+                  },
+                  { text: prompt },
+                ],
+              },
+            ],
+            generationConfig: {
+              temperature: 0.1,
+            },
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errText = await response.text();
+        this.logger.error(`Gemini transcribe error (${response.status}): ${errText}`);
+        return { text: '' };
+      }
+
+      const data = await response.json();
+      const rawText =
+        data.candidates?.[0]?.content?.parts
+          ?.map((p: any) => p.text || '')
+          .join('')
+          .trim() || '';
+
+      const cleaned =
+        rawText === '[Audio inaudible]' || rawText === '""' ? '' : rawText;
+      this.logger.log(`Transcribed audio successfully: "${cleaned}"`);
+      return { text: cleaned };
+    } catch (error: any) {
+      this.logger.error(`Failed to transcribe audio: ${error.message}`);
+      return { text: '' };
+    }
+  }
 }
+

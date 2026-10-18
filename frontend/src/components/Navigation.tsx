@@ -1,13 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, InputBase, Tooltip, Snackbar, Alert } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, InputBase, Tooltip, Snackbar, Alert, IconButton } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import { Sun, Moon } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
+import { useThemeMode } from '../theme/ThemeRegistry';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useRouter } from 'next/navigation';
 import { API_URL } from '../config/api';
@@ -45,7 +47,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    color: '#fff',
+    color: theme.palette.text.primary,
     [theme.breakpoints.up('md')]: {
       width: '22ch',
     },
@@ -65,43 +67,44 @@ function urlBase64ToUint8Array(base64String: string) {
 
 export default function Navigation() {
   const { user, logout } = useAuth();
-  const router = useRouter();
+  const { mode, toggleTheme } = useThemeMode();
   const [search, setSearch] = React.useState('');
   const [pushEnabled, setPushEnabled] = React.useState(false);
-  const [toast, setToast] = React.useState<{ open: boolean; message: string; severity: 'success' | 'info' | 'error' }>({
+  const [toast, setToast] = React.useState<{ open: boolean; message: string; severity: 'success' | 'info' | 'warning' | 'error' }>({
     open: false,
     message: '',
-    severity: 'success',
+    severity: 'info',
   });
+  const router = useRouter();
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window) {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window && user) {
       navigator.serviceWorker.register('/sw.js').then(async (reg) => {
         const sub = await reg.pushManager.getSubscription();
         if (sub) {
           setPushEnabled(true);
         }
-      }).catch(() => {});
+      }).catch((err) => console.error('SW reg error:', err));
     }
   }, [user]);
 
   const handleEnableOrTestPush = async () => {
-    try {
-      if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-        setToast({
-          open: true,
-          message: 'En iPhone, agrega primero esta página a "Pantalla de inicio" para recibir notificaciones Push.',
-          severity: 'info',
-        });
-        return;
-      }
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator) || !('PushManager' in window)) {
+      setToast({
+        open: true,
+        message: 'En iPhone: toca Compartir -> "Agregar a pantalla de inicio" para recibir notificaciones Push.',
+        severity: 'warning',
+      });
+      return;
+    }
 
+    try {
       const permission = await Notification.requestPermission();
       if (permission !== 'granted') {
         setToast({
           open: true,
-          message: 'Debes permitir las notificaciones en tu navegador/teléfono.',
-          severity: 'error',
+          message: 'Debes permitir las notificaciones en tu navegador para recibir alertas en el teléfono.',
+          severity: 'warning',
         });
         return;
       }
@@ -109,8 +112,8 @@ export default function Navigation() {
       const reg = await navigator.serviceWorker.register('/sw.js');
       await navigator.serviceWorker.ready;
 
-      const vapidRes = await fetch(`${API_URL}/notifications/vapid-public-key`);
-      const { publicKey } = await vapidRes.json();
+      const keyRes = await fetch(`${API_URL}/notifications/vapid-public-key`);
+      const { publicKey } = await keyRes.json();
 
       let sub = await reg.pushManager.getSubscription();
       if (!sub) {
@@ -155,7 +158,16 @@ export default function Navigation() {
   if (!user) return null;
 
   return (
-    <AppBar position="static" color="transparent" elevation={0} sx={{ borderBottom: '1px solid #333', mb: 4 }}>
+    <AppBar
+      position="static"
+      color="transparent"
+      elevation={0}
+      sx={{
+        borderBottom: mode === 'dark' ? '1px solid #333' : '1px solid #e5e7eb',
+        bgcolor: mode === 'dark' ? 'transparent' : '#ffffff',
+        mb: 4,
+      }}
+    >
       <Toolbar sx={{ flexWrap: 'wrap', gap: 1, py: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <FavoriteIcon sx={{ color: '#e91e63', mr: 1.5 }} />
@@ -192,6 +204,20 @@ export default function Navigation() {
             >
               {pushEnabled ? 'Push Activo' : 'Activar Push'}
             </Button>
+          </Tooltip>
+          <Tooltip title={mode === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}>
+            <IconButton
+              onClick={toggleTheme}
+              size="small"
+              sx={{
+                border: mode === 'dark' ? '1px solid #333' : '1px solid #e5e7eb',
+                color: mode === 'dark' ? '#fbbf24' : '#374151',
+                width: 36,
+                height: 36,
+              }}
+            >
+              {mode === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </IconButton>
           </Tooltip>
           <Button onClick={logout} variant="outlined" color="primary" size="small">Salir</Button>
         </Box>
