@@ -1,0 +1,40 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^4.0.50",
+    "@ai-sdk/react": "^4.0.80",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^9.2.0",
+    "@mui/lab": "^9.0.0-beta.8",
+    "@mui/material": "^9.2.0",
+    "ai": "^7.0.77",
+    "axios": "^1.18.1",
+    "date-fns": "^4.4.0",
+    "lucide-react": "^1.33.0",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-big-calendar": "^1.20.0",
+    "react-dom": "19.2.4",
+    "react-quill-new": "^3.8.3",
+    "swr": "^2.4.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-big-calendar": "^1.16.3",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "typescript": "^5"
+  }
+}

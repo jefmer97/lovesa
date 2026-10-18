@@ -1,0 +1,63 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: lovesa-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - lovesa-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lovesa-backend
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      PORT: 3001
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongodb:27017/lovesa}
+      JWT_SECRET: ${JWT_SECRET:-cambia_este_secreto_en_produccion}
+      BACKEND_URL: ${BACKEND_URL:-http://localhost:3001}
+    ports:
+      - "${BACKEND_PORT:-3001}:3001"
+    volumes:
+      - uploads_data:/app/uploads
+    networks:
+      - lovesa-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+    container_name: lovesa-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+      INTERNAL_API_URL: http://backend:3001
+      GOOGLE_GENERATIVE_AI_API_KEY: ${GOOGLE_GENERATIVE_AI_API_KEY}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    networks:
+      - lovesa-net
+
+volumes:
+  mongo_data:
+  uploads_data:
+
+networks:
+  lovesa-net:
+    driver: bridge
