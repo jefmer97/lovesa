@@ -88,6 +88,7 @@ export default function Navigation() {
           <Button component={Link} href="/calendar" color="inherit">Calendario</Button>
           <Button component={Link} href="/timeline" color="inherit">Historia</Button>
           <Button component={Link} href="/ideas" color="inherit">Ideas</Button>
+          <Button component={Link} href="/experiencias" color="inherit">Planeador</Button>
           <Button onClick={logout} variant="outlined" color="primary">Salir</Button>
         </Box>
       </Toolbar>
