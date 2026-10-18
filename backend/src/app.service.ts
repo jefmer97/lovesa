@@ -23,11 +23,11 @@ export class AppService implements OnModuleInit {
     try {
       const users = await this.userModel.find().exec();
       for (const u of users) {
-        const ideasCount = await this.ideaModel.countDocuments({ userId: (u as any)._id }).exec();
-        const activitiesCount = await this.activityModel.countDocuments({ userId: (u as any)._id }).exec();
-        if (ideasCount === 0 && activitiesCount <= 3) {
-          this.logger.log(`Auto-seeding initial relationship history for user ${u.email}...`);
-          await this.seedHistoryForUser((u as any)._id.toString());
+        const res = await this.seedHistoryForUser((u as any)._id.toString());
+        if (res.activitiesAdded > 0 || res.ideasAdded > 0) {
+          this.logger.log(
+            `Seeded ${res.activitiesAdded} activities and ${res.ideasAdded} ideas for ${u.email}`,
+          );
         }
       }
     } catch (err) {
@@ -236,6 +236,116 @@ export class AppService implements OnModuleInit {
         notes: '',
         media: [],
       },
+      {
+        title: 'Mi Cumpleaños con Dei: Cita Especial y Regalo del Reloj 🎂⌚❤️',
+        description:
+          'Dei me sorprendió en mi día con una cita hermosa y me regaló un reloj y detallitos. ("Me encantaron tus regalitos mi vida 😍 Me encantaste tú sobre todo, linda y hermosa... Con gusto cariño, yo encantada de poder darte detallitos y más en tu día").',
+        startDate: new Date('2026-09-24T14:00:00.000Z'),
+        endDate: new Date('2026-09-24T23:59:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'Noches durmiendo juntos abrazaditos 🌙🛌❤️',
+        description:
+          'Fin de semana durmiendo juntos acurrucaditos. ("Me encantó dormir contigo hoy y ayer. Gracias por la confianza y por compartir conmigo. Te amo ❤️").',
+        startDate: new Date('2026-09-27T22:00:00.000Z'),
+        endDate: new Date('2026-09-28T10:00:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'La Historia de la Lancha: "Eres la mujer de mi vida" 🚤💫',
+        description:
+          'Mirándola mientras me contaba la historia de la lancha, viajé a su pasado, la vi en mi presente y la imaginé en todo mi futuro: "Te juro Dei que eres la mujer de mi vida. Soy feliz contigo Dei, quiero llorar de la felicidad".',
+        startDate: new Date('2026-10-01T01:00:00.000Z'),
+        endDate: new Date('2026-10-01T03:00:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'Consintiéndola con almuerzos y tardes juntos ("Gracias por alimentarme cariño") 🍽️🫶🏼',
+        description:
+          'Llevándole su comidita rica al trabajo y cuidándola de sus dolorcitos. Dei: "Está muy rico, gracias mor... Gracias por alimentarme cariño ❤️🫶🏼".',
+        startDate: new Date('2026-10-03T13:00:00.000Z'),
+        endDate: new Date('2026-10-03T18:00:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'Noche juntos: "Tú friita y yo calientito, me complementas en todo" 🔥❄️❤️',
+        description:
+          'Despertar y dormir abrazados. Dei: "Más rico es despertar contigo... Gracias a ti por siempre ser el hombre que tengo al lado ❤️".',
+        startDate: new Date('2026-10-06T02:00:00.000Z'),
+        endDate: new Date('2026-10-06T10:00:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'Cita de madrugada: Shawarma y Juguitos 🥙🥤',
+        description:
+          'Salimos de madrugada por shawarma y juguitos naturales. ("Qué bien estaba el shawarma y los juguitos mi vida... Estoy telepáticamente abrazaditos").',
+        startDate: new Date('2026-10-08T01:30:00.000Z'),
+        endDate: new Date('2026-10-08T03:00:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'El Día del Temblor y las Réplicas: Cuidándonos a distancia 🌍🙏❤️',
+        description:
+          'Día de sismo fuerte y réplicas en la noche; pendientes el uno del otro a cada minuto sin poner el celular en modo sueño ("Quisiera tenerte a mi lado para abrazarte fuerte mi amor... Te amo Dei").',
+        startDate: new Date('2026-10-09T15:00:00.000Z'),
+        endDate: new Date('2026-10-09T23:59:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: '¡Dei conoce de sorpresa a mi Mamá y a mi Abuelito! 👨‍👩‍👦💓',
+        description:
+          'Mi mamá y mi abuelito fueron de sorpresa a conocer a Dei en Sabroso. ("Casi se me sale el corazón... YO QUEDÉ ICE, HIELO, TAQUITAQUIRUMBA... Tu abuelo tan cálido, gracias por presentarme a tus seres queridos" / "Yo estaba feliz de presentarle la mujer de mi vida a mi mamá y mi abuelito").',
+        startDate: new Date('2026-10-12T14:00:00.000Z'),
+        endDate: new Date('2026-10-12T22:00:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'Día Familiar y Apoyo Incondicional de Dei 🏥👨‍👩‍👧‍👦❤️',
+        description:
+          'Dei me acompañó en mi susto médico y compartió con mi abuelito, mi mamá, su novio y Dani. Dei: "No hay de qué, para eso y más soy tu novia ❤️". Jeff: "Ante el susto que pasé, al verte me sentí mucho mejor, y la razón de que fuera un día para recordar es que hayas estado ahí conmigo junto a los míos".',
+        startDate: new Date('2026-10-13T14:30:00.000Z'),
+        endDate: new Date('2026-10-13T23:30:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'Aniversario 2do Mes: "¡Te amo ❤️, Feliz Aniversario!" 🥂💐',
+        description:
+          'Cumplimos 2 meses de novios (15/10). Dei me escribió "Te amo ❤️ Feliz aniversario" ("Me derrite que me digas eso"), le llevé heladito de naranja-piña y salimos a celebrar nuestra cena de 2do mes.',
+        startDate: new Date('2026-10-15T14:50:00.000Z'),
+        endDate: new Date('2026-10-15T23:59:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
+      {
+        title: 'Cena nocturna y paseo juntos en moto 🛵🌙',
+        description:
+          'Salimos a comer juntos al cerrar turno y nos fuimos paseando en moto ("Vamos a comer mi vida y nos vamos en moto 🛵").',
+        startDate: new Date('2026-10-16T23:20:00.000Z'),
+        endDate: new Date('2026-10-16T23:59:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
     ];
 
     const initialIdeas = [
@@ -331,7 +441,7 @@ export class AppService implements OnModuleInit {
         timeframe: 'medium-term',
         isCompleted: false,
       },
-      // Planes futuros del Mapa Anual y Banco Musical
+      // Planes futuros del Mapa Anual, Chat Reciente y Banco Musical
       {
         title: 'Celebrar Halloween Juntos Disfrazados (31/10) 🎃',
         description: 'Mapa Anual (Octubre 2026): Elegir disfraces en pareja y salir a celebrar Halloween.',
@@ -342,6 +452,24 @@ export class AppService implements OnModuleInit {
         title: 'Cenar en Casco Antiguo y Noche en Hotel Boutique 🍷🏨',
         description: 'Mapa Anual: Cena especial en Casco Antiguo seguida de noche romántica en Hotel Boutique.',
         timeframe: 'short-term',
+        isCompleted: false,
+      },
+      {
+        title: 'Escapada en día de lluvia: Acurrucados viendo películas y One Piece 🌧️🍿',
+        description: 'Del chat (01/10): Escaparnos un día entero de lluvia para estar acurrucaditos viendo películas o anime (One Piece).',
+        timeframe: 'short-term',
+        isCompleted: false,
+      },
+      {
+        title: 'Conocer al Abuelito de Dei 🤝❤️',
+        description: 'Del chat (13/10): Conocer al abuelito de Dei que también es súper amable y cálido.',
+        timeframe: 'medium-term',
+        isCompleted: false,
+      },
+      {
+        title: 'Tocarle una canción en el Acordeón a Dei 🪗🎶',
+        description: 'Del chat (05/10): Sorprender a Dei tocándole una canción practicada en el acordeón.',
+        timeframe: 'medium-term',
         isCompleted: false,
       },
       {
