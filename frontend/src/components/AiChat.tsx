@@ -17,6 +17,7 @@ import {
   Sparkles,
   CheckCircle2,
   Loader2,
+  Trash2,
 } from 'lucide-react';
 import { API_URL } from '../config/api';
 import { useAuth } from '../context/AuthContext';
@@ -74,15 +75,64 @@ export default function AiChat() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const storageKey = user ? `lovesa_chat_messages_${(user as any)._id || user.email || 'default'}` : 'lovesa_chat_messages_default';
+
+  // Restore open state & cached messages on mount, then sync from MongoDB
+  useEffect(() => {
+    if (!user || typeof window === 'undefined') return;
+
+    const savedOpen = localStorage.getItem('lovesa_chat_open');
+    if (savedOpen === 'true') {
+      setIsOpen(true);
+    }
+
+    try {
+      const cached = localStorage.getItem(storageKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        }
+      }
+    } catch (e) {}
+
+    const token = localStorage.getItem('token');
+    fetch(`${API_URL}/ai/history`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((serverHistory) => {
+        if (Array.isArray(serverHistory) && serverHistory.length > 0) {
+          setMessages(serverHistory);
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(serverHistory));
+          } catch (e) {}
+        }
+      })
+      .catch((err) => console.warn('Could not fetch AI chat history:', err));
+  }, [user, storageKey]);
+
+  // Persist messages to localStorage whenever they change
+  useEffect(() => {
+    if (!user || typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(messages));
+    } catch (e) {}
+  }, [messages, user, storageKey]);
+
   useEffect(() => {
     isOpenRef.current = isOpen;
-  }, [isOpen]);
+    if (typeof window !== 'undefined' && user) {
+      localStorage.setItem('lovesa_chat_open', isOpen ? 'true' : 'false');
+    }
+  }, [isOpen, user]);
 
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isOpen, isLoading]);
+
 
   const getUserLang = () => {
     if (typeof navigator !== 'undefined') return navigator.language || 'es-PA';
@@ -364,6 +414,23 @@ export default function AiChat() {
     isAiSpeakingRef.current = false;
   };
 
+  const handleClearHistory = async () => {
+    if (!window.confirm('¿Quieres limpiar esta conversación y empezar un chat nuevo? (Tus actividades, ideas y recordatorios guardados NO se borrarán)')) {
+      return;
+    }
+    setMessages([]);
+    try {
+      localStorage.removeItem(storageKey);
+      const token = localStorage.getItem('token');
+      await fetch(`${API_URL}/ai/history`, {
+        method: 'DELETE',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch (e) {
+      console.error('Error clearing chat history:', e);
+    }
+  };
+
   const sendMessage = async (textToSend: string) => {
     const trimmed = textToSend.trim();
     if (!trimmed || isLoading) return;
@@ -392,6 +459,7 @@ export default function AiChat() {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
+          message: trimmed,
           messages: updatedHistory.map((m) => ({
             role: m.role,
             content: m.content,
@@ -405,7 +473,7 @@ export default function AiChat() {
 
       const data = await res.json();
       const assistantMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
+        id: data.id || (Date.now() + 1).toString(),
         role: 'assistant',
         content: data.reply || '¡Listo!',
         actions: data.actionsPerformed || [],
@@ -580,6 +648,17 @@ export default function AiChat() {
             </Box>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            {messages.length > 0 && (
+              <Tooltip title="Nueva conversación (limpiar historial de chat)">
+                <IconButton
+                  size="small"
+                  onClick={handleClearHistory}
+                  sx={{ color: isDark ? '#9ca3af' : '#6b7280' }}
+                >
+                  <Trash2 size={16} />
+                </IconButton>
+              </Tooltip>
+            )}
             <Tooltip title={voiceOutputEnabled ? 'Silenciar voz de IA' : 'Activar voz de IA'}>
               <IconButton
                 size="small"

@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Activity, ActivityDocument } from '../schemas/activity.schema';
 import { Idea, IdeaDocument } from '../schemas/idea.schema';
 import { Reminder, ReminderDocument } from '../schemas/reminder.schema';
+import { ChatMessage, ChatMessageDocument } from '../schemas/chat-message.schema';
 import { NotificationsService } from '../notifications/notifications.service';
 
 const DEFAULT_GEMINI_KEY =
@@ -24,8 +25,10 @@ export class AiService {
     @InjectModel(Activity.name) private activityModel: Model<ActivityDocument>,
     @InjectModel(Idea.name) private ideaModel: Model<IdeaDocument>,
     @InjectModel(Reminder.name) private reminderModel: Model<ReminderDocument>,
+    @InjectModel(ChatMessage.name) private chatMessageModel: Model<ChatMessageDocument>,
     private readonly notificationsService: NotificationsService,
   ) {}
+
 
   private getToolsDeclaration() {
     return [
@@ -533,11 +536,62 @@ export class AiService {
     return { error: `Herramienta desconocida: ${name}` };
   }
 
+  async getChatHistory(userId: string) {
+    const docs = await this.chatMessageModel
+      .find({ userId })
+      .sort({ createdAt: 1 })
+      .limit(100)
+      .exec();
+
+    return docs.map((d) => ({
+      id: d._id.toString(),
+      role: d.role,
+      content: d.content,
+      actions: d.actions || [],
+      createdAt: (d as any).createdAt,
+    }));
+  }
+
+  async clearChatHistory(userId: string) {
+    await this.chatMessageModel.deleteMany({ userId }).exec();
+    return { success: true };
+  }
+
   async chat(
     userId: string,
     messages: Array<{ role: string; content: string }>,
+    singleMessage?: string,
   ) {
-    const [activities, ideas, reminders] = await Promise.all([
+    const latestUserContent =
+      singleMessage?.trim() ||
+      (messages.length > 0 ? messages[messages.length - 1].content?.trim() : '');
+
+    if (latestUserContent) {
+      const existingCount = await this.chatMessageModel.countDocuments({ userId }).exec();
+      if (existingCount === 0 && messages.length > 1) {
+        // Backfill previous client messages if DB was empty
+        for (let i = 0; i < messages.length - 1; i++) {
+          const m = messages[i];
+          if (m.content?.trim()) {
+            await this.chatMessageModel.create({
+              userId,
+              role: m.role === 'assistant' || m.role === 'model' ? 'assistant' : 'user',
+              content: m.content.trim(),
+              actions: [],
+            });
+          }
+        }
+      }
+
+      await this.chatMessageModel.create({
+        userId,
+        role: 'user',
+        content: latestUserContent,
+        actions: [],
+      });
+    }
+
+    const [activities, ideas, reminders, savedHistory] = await Promise.all([
       this.activityModel
         .find({ userId })
         .sort({ startDate: -1 })
@@ -549,7 +603,14 @@ export class AiService {
         .sort({ remindAt: 1 })
         .limit(20)
         .exec(),
+      this.chatMessageModel
+        .find({ userId })
+        .sort({ createdAt: -1 })
+        .limit(40)
+        .exec(),
     ]);
+
+    const chronologicalHistory = [...savedHistory].reverse();
 
     const nowPanama = new Date().toLocaleString('es-PA', {
       timeZone: 'America/Panama',
@@ -603,13 +664,17 @@ ${ideasSummary}
 ${remindersSummary}
 `;
 
-    const contents: any[] = messages.map((m) => ({
+    const historySource =
+      chronologicalHistory.length > 0 ? chronologicalHistory : messages;
+
+    const contents: any[] = historySource.map((m: any) => ({
       role: m.role === 'assistant' || m.role === 'model' ? 'model' : 'user',
       parts: [{ text: m.content }],
     }));
 
     const actionsPerformed: any[] = [];
     const tools = this.getToolsDeclaration();
+    let finalReply = '¡Listo! He ejecutado las acciones solicitadas.';
 
     for (let step = 0; step < 5; step++) {
       const response = await fetch(
@@ -649,12 +714,10 @@ ${remindersSummary}
           .map((p: any) => p.text || '')
           .join('')
           .trim();
-        return {
-          reply:
-            replyText ||
-            '¡Listo! Ya realicé los cambios solicitados en la aplicación.',
-          actionsPerformed,
-        };
+        finalReply =
+          replyText ||
+          '¡Listo! Ya realicé los cambios solicitados en la aplicación.';
+        break;
       }
 
       const responseParts: any[] = [];
@@ -681,11 +744,20 @@ ${remindersSummary}
       });
     }
 
+    const savedAssistantMsg = await this.chatMessageModel.create({
+      userId,
+      role: 'assistant',
+      content: finalReply,
+      actions: actionsPerformed,
+    });
+
     return {
-      reply: '¡Listo! He ejecutado las acciones solicitadas.',
+      id: savedAssistantMsg._id.toString(),
+      reply: finalReply,
       actionsPerformed,
     };
   }
+
 
   async transcribeAudio(body: {
     audioBase64?: string;

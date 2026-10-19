@@ -5,6 +5,7 @@ import { AiController } from './ai.controller';
 import { Activity, ActivitySchema } from '../schemas/activity.schema';
 import { Idea, IdeaSchema } from '../schemas/idea.schema';
 import { Reminder, ReminderSchema } from '../schemas/reminder.schema';
+import { ChatMessage, ChatMessageSchema } from '../schemas/chat-message.schema';
 import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
       { name: Activity.name, schema: ActivitySchema },
       { name: Idea.name, schema: IdeaSchema },
       { name: Reminder.name, schema: ReminderSchema },
+      { name: ChatMessage.name, schema: ChatMessageSchema },
     ]),
     NotificationsModule,
   ],
