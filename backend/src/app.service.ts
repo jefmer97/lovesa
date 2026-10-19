@@ -444,7 +444,8 @@ export class AppService implements OnModuleInit {
       // Planes futuros del Mapa Anual, Chat Reciente y Banco Musical
       {
         title: 'Celebrar Halloween Juntos Disfrazados (31/10) 🎃',
-        description: 'Mapa Anual (Octubre 2026): Elegir disfraces en pareja y salir a celebrar Halloween.',
+        description:
+          'Sábado 31/10 — Opciones en evaluación (para 2): 1) Tántalo Kitchen & Roofbar + Hotel Boutique en Casco ($95–$140 sin hotel / $190–$275 con hotel, 0 estrés de tráfico y cierre íntimo directo). 2) Lazotea Rooftop con piscina en Casco ($110–$165 cena + tragos + fiesta). 3) Casa Casco: Cena Sushi en Koböre + Rooftop 360° + Club ($120–$185).',
         timeframe: 'short-term',
         isCompleted: false,
       },
@@ -514,6 +515,12 @@ export class AppService implements OnModuleInit {
       if (!exists) {
         await this.ideaModel.create({ ...idea, userId });
         ideasAdded++;
+      } else if (
+        idea.title.includes('Halloween') &&
+        exists.description !== idea.description
+      ) {
+        exists.description = idea.description;
+        await exists.save();
       }
     }
 
