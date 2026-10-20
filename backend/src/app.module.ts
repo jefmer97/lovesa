@@ -8,10 +8,12 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { IdeasModule } from './ideas/ideas.module';
+import { PreferencesModule } from './preferences/preferences.module';
 import { UploadController } from './upload.controller';
 import { User, UserSchema } from './schemas/user.schema';
 import { Activity, ActivitySchema } from './schemas/activity.schema';
 import { Idea, IdeaSchema } from './schemas/idea.schema';
+import { Preference, PreferenceSchema } from './schemas/preference.schema';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AiModule } from './ai/ai.module';
 
@@ -26,6 +28,7 @@ import { AiModule } from './ai/ai.module';
       { name: User.name, schema: UserSchema },
       { name: Activity.name, schema: ActivitySchema },
       { name: Idea.name, schema: IdeaSchema },
+      { name: Preference.name, schema: PreferenceSchema },
     ]),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
@@ -35,6 +38,7 @@ import { AiModule } from './ai/ai.module';
     AuthModule,
     ActivitiesModule,
     IdeasModule,
+    PreferencesModule,
     NotificationsModule,
     AiModule,
   ],

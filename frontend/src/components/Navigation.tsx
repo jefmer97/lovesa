@@ -193,6 +193,7 @@ export default function Navigation() {
           <Button component={Link} href="/calendar" color="inherit" size="small">Calendario</Button>
           <Button component={Link} href="/timeline" color="inherit" size="small">Historia</Button>
           <Button component={Link} href="/ideas" color="inherit" size="small">Ideas</Button>
+          <Button component={Link} href="/gustos" color="inherit" size="small" sx={{ color: '#e91e63', fontWeight: 700 }}>💖 Gustos de Dei</Button>
           <Button component={Link} href="/experiencias" color="inherit" size="small">Planeador</Button>
           <Tooltip title={pushEnabled ? 'Notificaciones activas (clic para enviar prueba al teléfono)' : 'Activar notificaciones Push en este teléfono'}>
             <Button

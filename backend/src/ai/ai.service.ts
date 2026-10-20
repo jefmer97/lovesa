@@ -5,6 +5,7 @@ import { Activity, ActivityDocument } from '../schemas/activity.schema';
 import { Idea, IdeaDocument } from '../schemas/idea.schema';
 import { Reminder, ReminderDocument } from '../schemas/reminder.schema';
 import { ChatMessage, ChatMessageDocument } from '../schemas/chat-message.schema';
+import { Preference, PreferenceDocument } from '../schemas/preference.schema';
 import { NotificationsService } from '../notifications/notifications.service';
 
 const DEFAULT_GEMINI_KEY =
@@ -26,6 +27,7 @@ export class AiService {
     @InjectModel(Idea.name) private ideaModel: Model<IdeaDocument>,
     @InjectModel(Reminder.name) private reminderModel: Model<ReminderDocument>,
     @InjectModel(ChatMessage.name) private chatMessageModel: Model<ChatMessageDocument>,
+    @InjectModel(Preference.name) private preferenceModel: Model<PreferenceDocument>,
     private readonly notificationsService: NotificationsService,
   ) {}
 
@@ -258,6 +260,29 @@ export class AiService {
                   description: 'Título del recordatorio a marcar como hecho',
                 },
               },
+            },
+          },
+          {
+            name: 'guardarGustoDeDei',
+            description:
+              'Guarda un nuevo gusto, canción favorita, comida, regalo, hobby o detalle que le gusta (o que no le gusta) a Dei en la sección Gustos de Dei.',
+            parameters: {
+              type: 'OBJECT',
+              properties: {
+                title: {
+                  type: 'STRING',
+                  description: 'El gusto o preferencia (ej. Canción El Incomprendido de Ismael Rivera)',
+                },
+                category: {
+                  type: 'STRING',
+                  description: 'Categoría: musica, comida, regalos, hobbies, detalles, o evitar',
+                },
+                notes: {
+                  type: 'STRING',
+                  description: 'Notas o contexto adicional sobre este gusto de Dei',
+                },
+              },
+              required: ['title', 'category'],
             },
           },
         ],
@@ -533,6 +558,26 @@ export class AiService {
       };
     }
 
+    if (name === 'guardarGustoDeDei') {
+      const validCategories = ['musica', 'comida', 'regalos', 'hobbies', 'detalles', 'evitar', 'otros'];
+      const cat = validCategories.includes(args.category) ? args.category : 'detalles';
+      const created = await this.preferenceModel.create({
+        userId,
+        title: args.title,
+        category: cat,
+        notes: args.notes || '',
+      });
+      return {
+        success: true,
+        action: 'created_preference',
+        preference: {
+          id: created._id,
+          title: created.title,
+          category: created.category,
+        },
+      };
+    }
+
     return { error: `Herramienta desconocida: ${name}` };
   }
 
@@ -591,7 +636,7 @@ export class AiService {
       });
     }
 
-    const [activities, ideas, reminders, savedHistory] = await Promise.all([
+    const [activities, ideas, reminders, preferences, savedHistory] = await Promise.all([
       this.activityModel
         .find({ userId })
         .sort({ startDate: -1 })
@@ -603,6 +648,7 @@ export class AiService {
         .sort({ remindAt: 1 })
         .limit(20)
         .exec(),
+      this.preferenceModel.find({ userId }).limit(50).exec(),
       this.chatMessageModel
         .find({ userId })
         .sort({ createdAt: -1 })
@@ -633,6 +679,11 @@ export class AiService {
       )
       .join('\n');
 
+    const preferencesSummary =
+      preferences
+        .map((p) => `- [${p.category.toUpperCase()}] "${p.title}": ${p.notes || ''}`)
+        .join('\n') || 'Sin gustos registrados.';
+
     const remindersSummary =
       reminders
         .map(
@@ -648,11 +699,15 @@ Aniversario oficial de noviazgo de Jeff y Dei: el día 15 de cada mes (iniciaron
 Tus capacidades y responsabilidades:
 1. Puedes CREAR, MODIFICAR y ELIMINAR actividades/recuerdos/citas en el Calendario y Nuestra Historia usando tus herramientas.
 2. Puedes CREAR, MODIFICAR, COMPLETAR y ELIMINAR ideas o planes en el Banco de Ideas.
-3. Puedes PROGRAMAR RECORDATORIOS con notificaciones Push Web reales al teléfono de Jeff (\`programarRecordatorioPush\`) o enviarle una notificación Push inmediata (\`enviarNotificacionPushAhora\`) para que no se le olvide nada que necesite hacer para Dei.
-4. Ayudas a Jeff a planear citas inolvidables aplicando el Método Taraban (Transición -> Clímax -> Cambio de Energía -> Diseño Íntimo -> Gancho Final).
-5. Cuando Jeff te hable por voz o texto pidiéndote crear, cambiar, borrar o recordar algo, EJECUTA LA HERRAMIENTA CORRESPONDIENTE de inmediato y confírmaselo con un tono cálido, directo, cómplice y conciso (ideal para ser leído o escuchado por voz).
+3. Puedes GUARDAR gustos, canciones favoritas, comidas o detalles de Dei en la sección "Gustos de Dei" (\`guardarGustoDeDei\`).
+4. Puedes PROGRAMAR RECORDATORIOS con notificaciones Push Web reales al teléfono de Jeff (\`programarRecordatorioPush\`) o enviarle una notificación Push inmediata (\`enviarNotificacionPushAhora\`) para que no se le olvide nada que necesite hacer para Dei.
+5. Ayudas a Jeff a planear citas inolvidables aplicando el Método Taraban (Transición -> Clímax -> Cambio de Energía -> Diseño Íntimo -> Gancho Final).
+6. Cuando Jeff te hable por voz o texto pidiéndote crear, cambiar, borrar o recordar algo, EJECUTA LA HERRAMIENTA CORRESPONDIENTE de inmediato y confírmaselo con un tono cálido, directo, cómplice y conciso (ideal para ser leído o escuchado por voz).
 
 ESTADO ACTUAL EN LA BASE DE DATOS DE JEFF Y DEI:
+
+=== GUSTOS Y FAVORITOS DE DEI ===
+${preferencesSummary}
 
 === ACTIVIDADES Y RECUERDOS REGISTRADOS ===
 ${activitiesSummary}

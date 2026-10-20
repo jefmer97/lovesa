@@ -44,6 +44,7 @@ const TOOL_LABELS: Record<string, string> = {
   programarRecordatorioPush: '⏰ Recordatorio Push programado',
   enviarNotificacionPushAhora: '📲 Notificación Push enviada',
   completarRecordatorio: '✅ Recordatorio completado',
+  guardarGustoDeDei: '💖 Gusto de Dei guardado',
 };
 
 export default function AiChat() {

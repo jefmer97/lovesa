@@ -16,6 +16,7 @@ import {
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
@@ -103,21 +104,21 @@ export default function Dashboard() {
       </Box>
 
       <Grid container spacing={4}>
-        <Grid xs={12} md={4}>
-          <Card>
+        <Grid xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%' }}>
             <CardActionArea
               component={Link}
               href="/calendar"
               sx={{
-                p: 4,
+                p: 3.5,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 height: '100%',
               }}
             >
-              <CalendarMonthIcon sx={{ fontSize: 80, color: 'text.primary', mb: 2 }} />
-              <Typography variant="h5" fontWeight="bold" color="text.primary">
+              <CalendarMonthIcon sx={{ fontSize: 68, color: 'text.primary', mb: 2 }} />
+              <Typography variant="h6" fontWeight="bold" color="text.primary" align="center">
                 Calendario de Actividades
               </Typography>
               <Typography variant="body2" color="textSecondary" align="center" mt={1}>
@@ -126,21 +127,21 @@ export default function Dashboard() {
             </CardActionArea>
           </Card>
         </Grid>
-        <Grid xs={12} md={4}>
-          <Card>
+        <Grid xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%' }}>
             <CardActionArea
               component={Link}
               href="/ideas"
               sx={{
-                p: 4,
+                p: 3.5,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 height: '100%',
               }}
             >
-              <LightbulbIcon sx={{ fontSize: 80, color: 'text.primary', mb: 2 }} />
-              <Typography variant="h5" fontWeight="bold" color="text.primary">
+              <LightbulbIcon sx={{ fontSize: 68, color: 'text.primary', mb: 2 }} />
+              <Typography variant="h6" fontWeight="bold" color="text.primary" align="center">
                 Banco de Ideas
               </Typography>
               <Typography variant="body2" color="textSecondary" align="center" mt={1}>
@@ -149,13 +150,36 @@ export default function Dashboard() {
             </CardActionArea>
           </Card>
         </Grid>
-        <Grid xs={12} md={4}>
-          <Card>
+        <Grid xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%', border: '1px solid rgba(233, 30, 99, 0.4)' }}>
+            <CardActionArea
+              component={Link}
+              href="/gustos"
+              sx={{
+                p: 3.5,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                height: '100%',
+              }}
+            >
+              <FavoriteIcon sx={{ fontSize: 68, color: '#e91e63', mb: 2 }} />
+              <Typography variant="h6" fontWeight="bold" color="text.primary" align="center">
+                Gustos de Dei 💖
+              </Typography>
+              <Typography variant="body2" color="textSecondary" align="center" mt={1}>
+                Sus canciones, comidas, flores, hobbies y lo que la enamora.
+              </Typography>
+            </CardActionArea>
+          </Card>
+        </Grid>
+        <Grid xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%' }}>
             <CardActionArea
               component={Link}
               href="/experiencias"
               sx={{
-                p: 4,
+                p: 3.5,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -163,12 +187,12 @@ export default function Dashboard() {
                 bgcolor: 'background.paper',
               }}
             >
-              <AutoAwesomeIcon sx={{ fontSize: 80, color: 'text.primary', mb: 2 }} />
-              <Typography variant="h5" fontWeight="bold" color="text.primary">
+              <AutoAwesomeIcon sx={{ fontSize: 68, color: 'text.primary', mb: 2 }} />
+              <Typography variant="h6" fontWeight="bold" color="text.primary" align="center">
                 Arquitectura de Experiencias
               </Typography>
               <Typography variant="body2" color="textSecondary" align="center" mt={1}>
-                Método Taraban: Planeador estratégico de citas, hitos e inbox de regalos.
+                Método Taraban: Planeador de Halloween, hitos e inbox.
               </Typography>
             </CardActionArea>
           </Card>

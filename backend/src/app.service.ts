@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Activity, ActivityDocument } from './schemas/activity.schema';
 import { Idea, IdeaDocument } from './schemas/idea.schema';
+import { Preference, PreferenceDocument } from './schemas/preference.schema';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -13,6 +14,7 @@ export class AppService implements OnModuleInit {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Activity.name) private activityModel: Model<ActivityDocument>,
     @InjectModel(Idea.name) private ideaModel: Model<IdeaDocument>,
+    @InjectModel(Preference.name) private preferenceModel: Model<PreferenceDocument>,
   ) {}
 
   getHello(): string {
@@ -524,6 +526,83 @@ export class AppService implements OnModuleInit {
       }
     }
 
-    return { activitiesAdded, ideasAdded };
+    const initialPreferences = [
+      {
+        title: 'Canción: "El Incomprendido" — Ismael Rivera 🎶💃',
+        category: 'musica',
+        notes: 'Le encanta esta salsa clásica de Ismael Rivera (Maelo). Ideal para ponerla cuando estemos juntos o salir a bailar.',
+      },
+      {
+        title: 'Bailar Música Latina (Salsa, Bachata, Merengue) 💃🕺',
+        category: 'musica',
+        notes: 'Le gusta mucho salir a bailar música latina juntos.',
+      },
+      {
+        title: 'Canción Original de 1er Mes ("Todo de ti me enamora y me derrite") 🎸❤️',
+        category: 'musica',
+        notes: 'La canción compuesta por Jeff para ella ("Eres mi paz, mi locura y mi escondite").',
+      },
+      {
+        title: 'Sushi 🍣',
+        category: 'comida',
+        notes: 'Le encanta comer sushi (como en nuestra cita del 13 de agosto).',
+      },
+      {
+        title: 'Heladito de Naranja-Piña 🍦🍍',
+        category: 'comida',
+        notes: 'Le gusta mucho el helado de naranja-piña (detalle del 15 de octubre).',
+      },
+      {
+        title: 'Pancitos de Mr. Bono (El Dorado) 🥐',
+        category: 'comida',
+        notes: 'Antojo favorito para compartir en la tarde.',
+      },
+      {
+        title: 'Shawarma y Juguitos Naturales 🥙🥤',
+        category: 'comida',
+        notes: 'Plan rico para comer después de cerrar turno de madrugada.',
+      },
+      {
+        title: 'Comida Coreana y Té 🍵',
+        category: 'comida',
+        notes: 'Le llama mucho la atención ir a desayunar a un restaurante coreano y tomar té.',
+      },
+      {
+        title: 'Ver Anime (One Piece) y Películas Acurrucados en Días de Lluvia 🌧️🍿',
+        category: 'hobbies',
+        notes: 'Le encanta estar acurrucaditos viendo One Piece o películas cuando llueve.',
+      },
+      {
+        title: 'Moldeado de Arcilla y Planes Artísticos 🎨',
+        category: 'hobbies',
+        notes: 'Le gustan las actividades creativas y manuales en pareja.',
+      },
+      {
+        title: 'Flores (Especialmente en Aniversarios y Flores Amarillas) 💐🌻',
+        category: 'regalos',
+        notes: 'Recibir flores la hace muy feliz.',
+      },
+      {
+        title: 'Caballerosidad, Cuidarla y Llevarle Comidita al Trabajo 🫶🏼🍽️',
+        category: 'detalles',
+        notes: 'Valora muchísimo que la cuides, que seas caballeroso, que le lleves almuerzo/cena y que la abraces calientito cuando ella tiene frío.',
+      },
+      {
+        title: 'Pasear Juntos en Moto de Noche 🛵🌙',
+        category: 'detalles',
+        notes: 'Le encanta irse paseando abrazados en la moto después de comer.',
+      },
+    ];
+
+    let preferencesAdded = 0;
+    for (const pref of initialPreferences) {
+      const exists = await this.preferenceModel.findOne({ userId, title: pref.title }).exec();
+      if (!exists) {
+        await this.preferenceModel.create({ ...pref, userId });
+        preferencesAdded++;
+      }
+    }
+
+    return { activitiesAdded, ideasAdded, preferencesAdded };
   }
 }
