@@ -348,6 +348,16 @@ export class AppService implements OnModuleInit {
         notes: '',
         media: [],
       },
+      {
+        title: 'Primera visita juntos a APLAFA para empezar a planificar 🏥💑❤️',
+        description:
+          'Fuimos juntos por primera vez a APLAFA para empezar a planificar en pareja luego de un pequeño sustito por hacerlo sin protección. Un paso más de confianza, cuidado y complicidad juntos.',
+        startDate: new Date('2026-10-20T15:00:00.000Z'),
+        endDate: new Date('2026-10-20T20:00:00.000Z'),
+        isAllDay: true,
+        notes: '',
+        media: [],
+      },
     ];
 
     const initialIdeas = [

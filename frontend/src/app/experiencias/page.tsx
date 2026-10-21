@@ -107,7 +107,7 @@ export default function ExperienciasPlanner() {
     {
       semana: 'Semana 3 (15 – 22 Oct)',
       estado: 'Completada ✅',
-      citaFuerte: 'Cena de 2do Mes de Aniversario ("¡Te amo ❤️, Feliz Aniversario!") 🥂💐',
+      citaFuerte: 'Cena de 2do Mes de Aniversario ("¡Te amo ❤️, Feliz Aniversario!") 🥂💐 + Primera visita juntos a APLAFA para empezar a planificar (20/10) 🏥💑',
       encuentroLigero: 'Heladito sorpresa de naranja-piña + Cena nocturna y paseo juntos en moto 🛵🌙',
     },
     {
