@@ -5,6 +5,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { Activity, ActivityDocument } from './schemas/activity.schema';
 import { Idea, IdeaDocument } from './schemas/idea.schema';
 import { Preference, PreferenceDocument } from './schemas/preference.schema';
+import { Reminder, ReminderDocument } from './schemas/reminder.schema';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -15,6 +16,7 @@ export class AppService implements OnModuleInit {
     @InjectModel(Activity.name) private activityModel: Model<ActivityDocument>,
     @InjectModel(Idea.name) private ideaModel: Model<IdeaDocument>,
     @InjectModel(Preference.name) private preferenceModel: Model<PreferenceDocument>,
+    @InjectModel(Reminder.name) private reminderModel: Model<ReminderDocument>,
   ) {}
 
   getHello(): string {
@@ -358,6 +360,16 @@ export class AppService implements OnModuleInit {
         notes: '',
         media: [],
       },
+      {
+        title: '🎃 Halloween: The Weeknd & Lana Del Rey en Casco Antiguo 🕶️🌹',
+        description:
+          'Cita Fuerte de Halloween (Sábado 31/10): Dei como Lana Del Rey y Jeff como The Weeknd. Cena + cócteles + fiesta en Rooftop de Casco Antiguo (Lazotea Rooftop +507 6851-6431 o Tántalo Roofbar +507 6616-5079, reservando 7:30 p.m., presupuesto $105–$130 USD los 2) y regreso a dormir juntos a casa con música y Aftercare.',
+        startDate: new Date('2026-10-31T19:30:00-05:00'),
+        endDate: new Date('2026-10-31T23:59:00-05:00'),
+        isAllDay: true,
+        notes: 'Disfraces: Lana Del Rey & The Weeknd. Playlist: El Incomprendido (Ismael Rivera) + Lust for Life / Stargirl Interlude / The Abyss.',
+        media: [],
+      },
     ];
 
     const initialIdeas = [
@@ -457,7 +469,7 @@ export class AppService implements OnModuleInit {
       {
         title: 'Celebrar Halloween Juntos Disfrazados (31/10) 🎃',
         description:
-          'Sábado 31/10 — Opciones en evaluación (para 2): 1) Tántalo Kitchen & Roofbar + Hotel Boutique en Casco ($95–$140 sin hotel / $190–$275 con hotel, 0 estrés de tráfico y cierre íntimo directo). 2) Lazotea Rooftop con piscina en Casco ($110–$165 cena + tragos + fiesta). 3) Casa Casco: Cena Sushi en Koböre + Rooftop 360° + Club ($120–$185).',
+          'PLAN OFICIAL CONFIRMADO (Sábado 31/10): Disfraces en pareja: Dei como Lana Del Rey 🌹 y Jeff como The Weeknd 🕶️. Plan: Cena a las 7:30 p.m. + cócteles + fiesta en Rooftop de Casco Antiguo (Lazotea +507 6851-6431 o Tántalo +507 6616-5079) y regreso a dormir juntos a casa. Presupuesto total: $105–$130 USD los 2.',
         timeframe: 'short-term',
         isCompleted: false,
       },
@@ -610,6 +622,39 @@ export class AppService implements OnModuleInit {
       if (!exists) {
         await this.preferenceModel.create({ ...pref, userId });
         preferencesAdded++;
+      }
+    }
+
+    const halloweenReminders = [
+      {
+        title: '📲 Reservar mesa para Halloween (Lazotea o Tántalo 7:30 p.m.)',
+        body: 'Escribir por WhatsApp a Lazotea (+507 6851-6431) o Tántalo (+507 6616-5079) para reservar mesa de cena para 2 el sábado 31 de octubre a las 7:30 p.m.',
+        remindAt: new Date('2026-10-26T16:00:00-05:00'),
+        url: '/experiencias',
+      },
+      {
+        title: '🕶️🌹 Revisar outfits de The Weeknd & Lana Del Rey',
+        body: 'Confirmar que estén listos tu outfit de The Weeknd (blazer/chaqueta, camisa negra, lentes oscuros) y el de Dei como Lana Del Rey para el sábado.',
+        remindAt: new Date('2026-10-28T18:00:00-05:00'),
+        url: '/experiencias',
+      },
+      {
+        title: '🎃 ¡Hoy es Halloween con Dei! (The Weeknd & Lana Del Rey)',
+        body: 'Tener lista la playlist (El Incomprendido + The Weeknd & Lana Del Rey), dejar la habitación impecable con snacks/bebidas para cuando regresen a dormir a casa.',
+        remindAt: new Date('2026-10-31T16:30:00-05:00'),
+        url: '/experiencias',
+      },
+    ];
+
+    for (const rem of halloweenReminders) {
+      const exists = await this.reminderModel.findOne({ userId, title: rem.title }).exec();
+      if (!exists) {
+        await this.reminderModel.create({
+          ...rem,
+          userId,
+          isCompleted: false,
+          sent: false,
+        });
       }
     }
 

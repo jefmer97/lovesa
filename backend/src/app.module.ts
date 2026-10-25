@@ -14,6 +14,7 @@ import { User, UserSchema } from './schemas/user.schema';
 import { Activity, ActivitySchema } from './schemas/activity.schema';
 import { Idea, IdeaSchema } from './schemas/idea.schema';
 import { Preference, PreferenceSchema } from './schemas/preference.schema';
+import { Reminder, ReminderSchema } from './schemas/reminder.schema';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AiModule } from './ai/ai.module';
 
@@ -29,6 +30,7 @@ import { AiModule } from './ai/ai.module';
       { name: Activity.name, schema: ActivitySchema },
       { name: Idea.name, schema: IdeaSchema },
       { name: Preference.name, schema: PreferenceSchema },
+      { name: Reminder.name, schema: ReminderSchema },
     ]),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),

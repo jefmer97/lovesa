@@ -15,9 +15,9 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Button,
 } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LocalBarIcon from '@mui/icons-material/LocalBar';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 
@@ -43,51 +43,41 @@ export default function ExperienciasPlanner() {
     setValue(newValue);
   };
 
-  const halloweenOptions = [
+  const whatsappMsg = encodeURIComponent(
+    'Hola! 👋 Quisiéramos hacer una reserva de cena para 2 personas este sábado 31 de octubre a las 7:30 p.m. en el Rooftop, a nombre de Jeffreey. ¡Muchas gracias!',
+  );
+
+  const venues = [
     {
-      id: 'opcion-1',
-      badge: '⭐ RECOMENDADA (2 Hitos del Mapa Anual en 1)',
-      titulo: 'Opción 1: Tántalo Kitchen & Roofbar + Noche en Hotel Boutique (Casco Antiguo)',
+      id: 'lazotea',
+      badge: '⭐ OPCIÓN A (MÁS ESTÉTICA PARA FOTOS LANA & THE WEEKND)',
+      titulo: 'Lazotea Restaurant & Rooftop (Casco Antiguo)',
+      whatsapp: '+507 6851-6431',
+      whatsappUrl: `https://wa.me/50768516431?text=${whatsappMsg}`,
       concepto:
-        'Evitan el tranque mortal de salida de Casco en Halloween. Hacen check-in en la tarde, se visten y maquillan juntos en la habitación con música y un trago (Transición), suben al Rooftop a cenar y disfrutar la fiesta de disfraces (Clímax), y a la 1:00 a.m. bajan en ascensor directo a su habitación privada (Diseño Íntimo).',
-      costos: [
-        '🍽️ Cena + Cócteles para 2 (Tántalo Kitchen o Lazotea a 1 cuadra): $75 – $110',
-        '🎟️ Cover Fiesta Halloween Rooftop: $0 – $40 (suele incluirse al hospedarse o reservar cena temprano)',
-        '🏨 Noche en Hotel Boutique en Casco: Tántalo Hotel / Magnolia ($95 – $135) o Central Hotel con piscina ($165 – $210)',
+        'Rooftop elegante con piscina iluminada y vista al skyline de Panamá. La estética nocturna con luces cálidas y reflejos en el agua queda de videoclip de "Lust for Life" / "Stargirl Interlude". Si reservan cena a las 7:30 p.m., cenan tranquilos y a las 10:00 p.m. ya están adentro cuando empieza la fiesta de Halloween sin pagar cover de discoteca.',
+      menuRecomendado: [
+        '🍤 Entrada para compartir: Tartar de Salmón en wantón ($14) o Stracciatella de Burrata ($14)',
+        '🍽️ Plato fuerte Dei: Mac & Cheese Trufado ($14) o Tiradito ($19)',
+        '🍽️ Plato fuerte Jeff: Pao de Queijo e Porco ($19) o Tacos de Langosta ($28)',
+        '🍸 4 Cócteles de Autor (2 para Dei + 2 para ti, ~$13 c/u): ~$52',
       ],
-      totalSinHotel: '$95 – $140 USD',
-      totalConHotel: '$190 – $275 USD',
-      ventaja: 'Cero estrés de estacionamiento, máxima intimidad al cerrar la noche y cumples el hito de "Cena en Casco + Hotel Boutique".',
+      totalEstimado: '$110 – $135 USD (Total los 2 con impuestos)',
     },
     {
-      id: 'opcion-2',
-      badge: '✨ SOFISTICADA & SEXY (Con Piscina en Azotea)',
-      titulo: 'Opción 2: Lazotea Restaurant & Rooftop (Casco Antiguo)',
+      id: 'tantalo',
+      badge: '🔥 OPCIÓN B (MÁS FIESTERA Y RELAJADA)',
+      titulo: 'Tántalo Kitchen & Roofbar (Casco Antiguo)',
+      whatsapp: '+507 6616-5079',
+      whatsappUrl: `https://wa.me/50766165079?text=${whatsappMsg}`,
       concepto:
-        'Alta gastronomía latinoamericana y coctelería de autor en un rooftop elegante con piscina iluminada y vista al skyline. Ideal para lucir un disfraz en pareja sexy/elegante, cenar a las 7:30 p.m. y quedarse cuando el rooftop se transforma en fiesta temática de Halloween a las 10:00 p.m.',
-      costos: [
-        '🍽️ Cena de 3 tiempos + 2 cócteles c/u: $90 – $135',
-        '🎟️ Acceso fiesta Halloween (reservando mesa de cena antes de las 8:00 p.m.): $0 – $30',
-        '🚗 Uber ida y vuelta (para tomar tranquilos y no buscar parking en Casco): $15 – $25',
+        'El rooftop más famoso de Casco por su ambiente de fiesta y DJ en vivo. Reservando a las 7:30 p.m. piden platos al centro para picar y cócteles de autor, y se quedan directo en la fiesta de disfraces.',
+      menuRecomendado: [
+        '🥓 Entrada para compartir: Belly Dance (Pork Belly crocante, $15) + Croquetas ($12)',
+        '🐙 Platos principales: Empanada C3 de Pulpo ($16) + Angus Burger ($17)',
+        '🍸 4 Cócteles de Autor ("Noche en el Casco" / "Patrón Mule", ~$12 c/u): ~$48',
       ],
-      totalSinHotel: '$110 – $165 USD',
-      totalConHotel: '$230 – $295 USD (sumando hotel como W Panama $135 o Hotel Boutique en Casco)',
-      ventaja: 'El mejor balance entre cena romántica de alto nivel, fotos brutales junto a la piscina y buena rumba.',
-    },
-    {
-      id: 'opcion-3',
-      badge: '🍣 SUSHI + MANSIÓN DE HALLOWEEN (5 Pisos)',
-      titulo: 'Opción 3: Casa Casco — Cena en Koböre (Sushi/Asiático) + Rooftop 360° + Club',
-      concepto:
-        'Casa Casco transforma sus 5 pisos frente a Plaza Herrera en una mansión de Halloween. Empiezan cenando sushi y platos asiáticos en Koböre (sabiendo que a Dei le encanta el sushi), suben al Rooftop 360° para fotos y cócteles, y bajan al Club del piso intermedio a bailar.',
-      costos: [
-        '🍣 Cena en Koböre / Marula + cócteles para 2: $85 – $130',
-        '🎃 Preventa fiesta Halloween Casa Casco (Passline / MiEventos): $30 – $50 por pareja ($15–$25 c/u)',
-        '🚗 Uber / Logística: $15 – $25',
-      ],
-      totalSinHotel: '$120 – $185 USD',
-      totalConHotel: '$220 – $300 USD',
-      ventaja: 'La decoración más impresionante de Halloween en Casco y tres ambientes distintos sin cambiar de edificio.',
+      totalEstimado: '$100 – $120 USD (Total los 2 con impuestos)',
     },
   ];
 
@@ -112,9 +102,9 @@ export default function ExperienciasPlanner() {
     },
     {
       semana: 'Semana 4 (23 – 31 Oct)',
-      estado: 'En Planeación 🎃',
-      citaFuerte: 'SÁBADO 31 DE OCTUBRE: Noche de Halloween Disfrazados en Pareja (Cena + Rooftop + Aftercare) 🎃👻🍷',
-      encuentroLigero: 'Elegir y probarnos los disfraces juntos en la semana previa ✨',
+      estado: 'Confirmada 🎃',
+      citaFuerte: 'SÁBADO 31 DE OCTUBRE: Halloween "The Weeknd & Lana Del Rey" — Cena + Fiesta en Rooftop de Casco Antiguo ($105–$130) y regreso a dormir juntos a casa 🕶️🌹🍷',
+      encuentroLigero: 'Armar y probarnos los outfits de The Weeknd y Lana Del Rey esta semana ✨',
     },
   ];
 
@@ -122,8 +112,8 @@ export default function ExperienciasPlanner() {
     { mes: 'Agosto 2026', evento: 'Inicio del Planeador (Mr. Bono y El Dorado)', icono: '✅' },
     { mes: 'Septiembre 2026', evento: 'Aniversario: Regalar Flores y Canción Original (15/09)', icono: '💐' },
     { mes: 'Septiembre 2026', evento: 'Día de las Flores Amarillas (21/09)', icono: '🌻' },
-    { mes: 'Octubre 2026', evento: 'Aniversario 2do Mes (15/10) + Paseo en Moto', icono: '✅' },
-    { mes: 'Octubre 2026 (31/10)', evento: 'EN PLANEACIÓN: Celebrar Halloween Juntos Disfrazados (+ Cena en Casco / Hotel Boutique)', icono: '🎃' },
+    { mes: 'Octubre 2026', evento: 'Aniversario 2do Mes (15/10) + Primera visita a APLAFA (20/10)', icono: '✅' },
+    { mes: 'Octubre 2026 (31/10)', evento: 'CONFIRMADO: Halloween "The Weeknd & Lana Del Rey" en Casco Antiguo', icono: '🎃' },
     { mes: 'Noviembre 2026', evento: 'Cenar en Casco Antiguo y Hotel Boutique', icono: '🍷' },
     { mes: 'Diciembre 2026', evento: 'Regalo de Flores (15/12 - Trimestral)', icono: '💐' },
     { mes: 'Diciembre 2026', evento: 'Plan de Navidad - "La Navidad Más Linda"', icono: '🎄' },
@@ -154,7 +144,7 @@ export default function ExperienciasPlanner() {
   ];
 
   const wishlistRegalos = [
-    'Disfraz en pareja para Halloween (que Dei estuvo viendo desde el 28/09)',
+    'Corona de rosas rojas o accesorio vintage para el outfit de Lana Del Rey de Dei (31/10)',
     'Escapada de día lluvioso viendo películas y One Piece acurrucados',
     'Tocarle una canción en el acordeón',
   ];
@@ -172,84 +162,144 @@ export default function ExperienciasPlanner() {
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} textColor="primary" indicatorColor="primary" variant="scrollable" scrollButtons="auto">
-          <Tab label="🎃 Plan Halloween (31 Oct)" />
+          <Tab label="🎃 Plan Halloween: The Weeknd & Lana (31 Oct)" />
           <Tab label="📅 Logística Octubre" />
           <Tab label="🗺️ Mapa Anual" />
           <Tab label="📥 Inbox (Backlog)" />
         </Tabs>
       </Box>
 
-      {/* TAB 0: OPERACIÓN HALLOWEEN */}
+      {/* TAB 0: PLAN MAESTRO HALLOWEEN */}
       <CustomTabPanel value={value} index={0}>
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" fontWeight="bold" color="text.primary" gutterBottom>
-            🎃 Operación Halloween con Dei — Sábado 31 de Octubre
-          </Typography>
+        <Box sx={{ mb: 3, p: 3, borderRadius: 3, bgcolor: 'rgba(233, 30, 99, 0.1)', border: '1px solid rgba(233, 30, 99, 0.35)' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+            <Typography variant="h4" fontWeight="bold" color="text.primary">
+              🕶️🌹 Halloween: The Weeknd & Lana Del Rey
+            </Typography>
+            <Chip label="Presupuesto Meta: $80 – $140 USD" sx={{ bgcolor: '#e91e63', color: '#fff', fontWeight: 'bold' }} />
+          </Box>
           <Typography variant="body1" color="text.secondary">
-            Fase 1: Comparativa de Lugares para Reservar y Presupuesto Estimado en Ciudad de Panamá (para 2 personas).
+            <strong>Fecha:</strong> Sábado 31 de Octubre (Reserva 7:30 p.m.) • <strong>Formato:</strong> Cena + Cócteles + Fiesta en Rooftop de Casco Antiguo y regreso a casa para dormir juntos.
           </Typography>
         </Box>
 
-        <Grid container spacing={3}>
-          {halloweenOptions.map((opt) => (
-            <Grid xs={12} key={opt.id}>
-              <Card elevation={3} sx={{ borderRadius: 3, border: '1px solid rgba(233, 30, 99, 0.35)' }}>
-                <Box sx={{ bgcolor: 'rgba(233, 30, 99, 0.12)', px: 3, py: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                  <Typography variant="subtitle2" fontWeight="bold" sx={{ color: '#e91e63' }}>
-                    {opt.badge}
-                  </Typography>
-                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                    <Chip label={`Sin hotel: ${opt.totalSinHotel}`} size="small" color="primary" variant="outlined" />
-                    <Chip label={`Con hotel: ${opt.totalConHotel}`} size="small" sx={{ bgcolor: '#e91e63', color: '#fff', fontWeight: 'bold' }} />
+        {/* SECCIÓN 1: OUTFITS / DISFRACES */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid xs={12} md={6}>
+            <Card elevation={3} sx={{ height: '100%', borderRadius: 3, border: '1px solid #444' }}>
+              <CardContent sx={{ p: 3 }}>
+                <Typography variant="h6" fontWeight="bold" color="text.primary" gutterBottom>
+                  🌹 Outfit de Dei: Lana Del Rey (Born to Die / Lust for Life)
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+                  Estética retro, sensual y súper fotogénica (además muy cómoda para cenar y bailar):
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                  • <strong>Vestido:</strong> Vestido corto blanco (encaje/satén) o rojo vino estilo vintage.
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                  • <strong>Cabello & Detalle Sorpresa:</strong> Ondas sueltas tipo Hollywood retro + <strong>corona o diadema de rosas rojas</strong> (¡puedes llevársela tú de sorpresa antes de salir!).
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  • <strong>Maquillaje & Accesorios:</strong> Delineado <em>cat-eye</em> marcado, labios rojos/vino y collar de corazón o perlas.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Card elevation={3} sx={{ height: '100%', borderRadius: 3, border: '1px solid #444' }}>
+              <CardContent sx={{ p: 3 }}>
+                <Typography variant="h6" fontWeight="bold" color="text.primary" gutterBottom>
+                  🕶️ Outfit de Jeff: The Weeknd (After Hours o Starboy)
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+                  Dos versiones fáciles de armar esta semana en Panamá:
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 0.8 }}>
+                  • <strong>Versión A — After Hours / Blinding Lights (La más icónica):</strong> Saco/blazer rojo (o vino/negro), camisa de vestir negra por dentro, corbata negra delgada, lentes oscuros cuadrados retro y una curita/bandita en la nariz para las fotos.
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  • <strong>Versión B — Starboy (Más fresca para bailar):</strong> Chaqueta negra tipo cuero o bomber, t-shirt negra entallada, pantalón negro, cadena plateada y lentes oscuros.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
+        {/* SECCIÓN 2: RESERVA DE LUGAR Y PRESUPUESTO */}
+        <Typography variant="h5" fontWeight="bold" color="text.primary" sx={{ mb: 2 }}>
+          📍 Paso 1: Reservar Mesa a las 7:30 p.m. (Truco para Cero Cover + Mesa Asegurada)
+        </Typography>
+
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          {venues.map((v) => (
+            <Grid xs={12} md={6} key={v.id}>
+              <Card elevation={3} sx={{ height: '100%', borderRadius: 3, border: '1px solid rgba(233, 30, 99, 0.35)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Box>
+                  <Box sx={{ bgcolor: 'rgba(233, 30, 99, 0.12)', px: 2.5, py: 1.2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                    <Typography variant="caption" fontWeight="bold" sx={{ color: '#e91e63' }}>
+                      {v.badge}
+                    </Typography>
+                    <Chip label={v.totalEstimado} size="small" color="success" variant="outlined" />
                   </Box>
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="h6" fontWeight="bold" color="text.primary" gutterBottom>
+                      {v.titulo}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.55 }}>
+                      {v.concepto}
+                    </Typography>
+                    <Divider sx={{ my: 1.5 }} />
+                    <Typography variant="subtitle2" fontWeight="bold" color="text.primary" sx={{ mb: 1 }}>
+                      🍽️ Combinación Exacta para Cuidar el Presupuesto ($80–$140):
+                    </Typography>
+                    {v.menuRecomendado.map((m, idx) => (
+                      <Typography key={idx} variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                        • {m}
+                      </Typography>
+                    ))}
+                  </CardContent>
                 </Box>
-                <CardContent sx={{ p: 3 }}>
-                  <Typography variant="h6" fontWeight="bold" color="text.primary" gutterBottom>
-                    {opt.titulo}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.6 }}>
-                    {opt.concepto}
-                  </Typography>
-                  <Divider sx={{ my: 1.5 }} />
-                  <Typography variant="subtitle2" fontWeight="bold" color="text.primary" sx={{ mb: 1 }}>
-                    💰 Desglose de Costos (Estimado para Jeff y Dei):
-                  </Typography>
-                  {opt.costos.map((c, idx) => (
-                    <Typography key={idx} variant="body2" color="text.secondary" sx={{ mb: 0.5, pl: 1 }}>
-                      • {c}
-                    </Typography>
-                  ))}
-                  <Box sx={{ mt: 2, p: 1.5, borderRadius: 2, bgcolor: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.25)' }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      🎯 Ventaja Estratégica (Método Taraban): {opt.ventaja}
-                    </Typography>
-                  </Box>
-                </CardContent>
+                <Box sx={{ p: 2.5, pt: 0 }}>
+                  <Button
+                    component="a"
+                    href={v.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fullWidth
+                    variant="contained"
+                    sx={{ bgcolor: '#22c55e', color: '#fff', fontWeight: 'bold', '&:hover': { bgcolor: '#16a34a' } }}
+                  >
+                    📲 Reservar por WhatsApp ({v.whatsapp})
+                  </Button>
+                </Box>
               </Card>
             </Grid>
           ))}
         </Grid>
 
-        <Card elevation={2} sx={{ mt: 4, borderRadius: 3, border: '1px solid #444' }}>
+        {/* SECCIÓN 3: ARQUITECTURA TARABAN DE LA NOCHE */}
+        <Card elevation={3} sx={{ borderRadius: 3, border: '1px solid #444' }}>
           <CardContent sx={{ p: 3 }}>
             <Typography variant="h6" fontWeight="bold" color="text.primary" gutterBottom>
-              📐 Arquitectura Taraban de la Noche (31 de Octubre)
+              📐 Guion Completo de la Noche (Método Taraban — Sábado 31 de Octubre)
             </Typography>
-            <Box sx={{ pl: 2, borderLeft: '3px solid #e91e63', display: 'flex', flexDirection: 'column', gap: 1.5, mt: 2 }}>
+            <Box sx={{ pl: 2, borderLeft: '3px solid #e91e63', display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
               <Typography variant="body2" color="text.secondary">
-                <strong>1. Transición (Cortar el estrés):</strong> Recoger a Dei sin prisa o llegar temprano al hotel boutique; poner playlist para arreglarse y vestirse con los disfraces juntos tomando el primer brindis privado.
+                <strong>1. Transición (6:00 p.m. – 7:15 p.m. | Romper la rutina y subir energía):</strong> Antes de salir hacia Casco, deja tu habitación arreglada y perfumada para el regreso. Al verla vestida de Lana Del Rey, entrégale un detalle sorpresa (unas rosas rojas que combinen con su personaje) y pon en el carro/casa <em>«El Incomprendido» de Ismael Rivera</em> para sacarle una sonrisa inmediata seguida de <em>«Lust for Life» (Lana Del Rey ft. The Weeknd)</em>.
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <strong>2. Clímax (Contraste y Validación):</strong> Entrada al Rooftop en Casco Antiguo (7:30 p.m. – 8:00 p.m.), sesión de fotos luciendo los disfraces, cena deliciosa y cócteles de autor mientras sube la energía de la fiesta.
+                <strong>2. Clímax (7:30 p.m. – 11:30 p.m. | Contraste, Fotos y Fiesta en Rooftop):</strong> Llegada puntual a las 7:30 p.m. al Rooftop en Casco Antiguo. Sesión de fotos en pareja estilo <em>The Weeknd & Lana Del Rey</em> con el skyline de fondo, cena para compartir y cócteles de autor mientras el rooftop se llena y arranca el DJ de Halloween.
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <strong>3. Cambio de Energía (Tensión Romántica):</strong> Bailar juntos en la fiesta de disfraces y retirarse en el punto más alto de la noche (12:30 a.m. – 1:00 a.m.) antes del agotamiento o el tráfico.
+                <strong>3. Cambio de Energía (11:30 p.m. – 12:45 a.m. | Tensión Romántica):</strong> Bailar pegaditos con sus tragos y retirarse en el punto más alto de la noche (~12:45 a.m. – 1:00 a.m.) antes del agotamiento o del trancón pesado de las 3:00 a.m.
               </Typography>
               <Typography variant="body2" color="text.primary">
-                <strong>4. Diseño Íntimo y Aftercare:</strong> Cierre privado solo para los dos (en el hotel boutique o en casa), quitarse los disfraces, música suave y su comida/snack favorito de madrugada.
+                <strong>4. Diseño Íntimo y Aftercare en Casa (1:15 a.m. en adelante):</strong> Llegar a casa donde todo ya está listo. Poner de fondo <em>«Stargirl Interlude»</em>, <em>«Prisoner»</em> y <em>«The Abyss»</em> (las colaboraciones más sensuales de The Weeknd y Lana Del Rey), quitarse los disfraces, disfrutar su noche juntos y cerrar con su comidita/snack favorito y dormir abrazaditos (<em>«Tú friita y yo calientito»</em>).
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <strong>5. Gancho Final (Anticipación):</strong> Desayuno juntos el domingo 1 de noviembre y enviarle la mejor foto impresa o editada de la noche.
+                <strong>5. Gancho Final (Domingo 1 de Noviembre):</strong> Despertar juntos, desayunar rico y subir/enviarle la mejor foto de ustedes como <em>The Weeknd & Lana Del Rey</em>.
               </Typography>
             </Box>
           </CardContent>
