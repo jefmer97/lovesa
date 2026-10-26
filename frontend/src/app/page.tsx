@@ -94,7 +94,7 @@ export default function Dashboard() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
-      <Box sx={{ mb: 6 }}>
+      <Box sx={{ mb: 4 }}>
         <Typography variant="h3" fontWeight="bold" color="primary" gutterBottom>
           Hola, {user.name} 👋
         </Typography>
@@ -102,6 +102,54 @@ export default function Dashboard() {
           Bienvenido a tu organizador de relación con Dei. Háblale al botón mágico rosado (abajo a la derecha) para planear, crear o programar alertas.
         </Typography>
       </Box>
+
+      {/* Banner Destacado: Operación Halloween */}
+      <Paper
+        elevation={4}
+        sx={{
+          mb: 4,
+          p: { xs: 2.5, md: 3.5 },
+          borderRadius: 4,
+          background: 'linear-gradient(135deg, #2b0918 0%, #5c0f2b 50%, #1f2937 100%)',
+          color: '#ffffff',
+          border: '1px solid rgba(233, 30, 99, 0.5)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box>
+          <Chip
+            label="🎃 PRÓXIMA CITA FUERTE • SÁBADO 31 OCT (7:30 P.M.)"
+            size="small"
+            sx={{ bgcolor: 'rgba(233, 30, 99, 0.3)', color: '#fbcfe8', fontWeight: 800, mb: 1 }}
+          />
+          <Typography variant="h5" fontWeight="900" sx={{ color: '#fff' }}>
+            The Weeknd & Lana Del Rey en Casco Antiguo 🕶️🌹
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mt: 0.5 }}>
+            Presupuesto meta $80–$140 USD • Reserva Rooftop + Checklist de Outfits + Línea de Tiempo Hora por Hora.
+          </Typography>
+        </Box>
+        <Button
+          component={Link}
+          href="/halloween"
+          variant="contained"
+          sx={{
+            bgcolor: '#e91e63',
+            color: '#fff',
+            fontWeight: 800,
+            px: 3,
+            py: 1.2,
+            borderRadius: 3,
+            '&:hover': { bgcolor: '#c2185b' },
+          }}
+        >
+          Ver Plan Visual de Halloween ➔
+        </Button>
+      </Paper>
 
       <Grid container spacing={4}>
         <Grid xs={12} sm={6} md={3}>

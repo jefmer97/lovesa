@@ -190,6 +190,20 @@ export default function Navigation() {
         </Box>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
           <Button component={Link} href="/" color="inherit" size="small">Dashboard</Button>
+          <Button
+            component={Link}
+            href="/halloween"
+            size="small"
+            sx={{
+              bgcolor: 'rgba(233, 30, 99, 0.15)',
+              color: '#e91e63',
+              fontWeight: 800,
+              border: '1px solid rgba(233, 30, 99, 0.4)',
+              '&:hover': { bgcolor: 'rgba(233, 30, 99, 0.25)' },
+            }}
+          >
+            🎃 Halloween
+          </Button>
           <Button component={Link} href="/calendar" color="inherit" size="small">Calendario</Button>
           <Button component={Link} href="/timeline" color="inherit" size="small">Historia</Button>
           <Button component={Link} href="/ideas" color="inherit" size="small">Ideas</Button>
