@@ -1,0 +1,44 @@
+name: lovesa_mobile
+description: "Lovesa Mobile App — Clean Architecture con Notificaciones Push, Auto-Updates OTA y Director AI"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Material Design
+  cupertino_icons: ^1.0.6
+  google_fonts: ^6.1.0
+
+  # Clean Architecture Core: Inversion of Control & State Management
+  get_it: ^7.6.6
+  flutter_bloc: ^8.1.3
+  equatable: ^2.0.5
+  dartz: ^0.10.1
+
+  # Networking & Storage
+  http: ^1.1.2
+  shared_preferences: ^2.2.2
+  dio: ^5.4.0
+
+  # Notificaciones Push & Local Notifications
+  flutter_local_notifications: ^17.0.0
+  firebase_core: ^2.27.0
+  firebase_messaging: ^14.7.19
+
+  # In-App Auto Updates (OTA / Turbo Push)
+  package_info_plus: ^5.0.1
+  url_launcher: ^6.2.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
