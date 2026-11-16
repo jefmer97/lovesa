@@ -1,12 +1,12 @@
 {
   "name": "Lovesa Mobile",
   "slug": "lovesa-mobile",
-  "version": "1.0.0+3",
-  "versionCode": 3,
+  "version": "1.0.0+4",
+  "versionCode": 4,
   "versionName": "1.0.0",
   "mandatory": true,
-  "changelog": "feat(mobile): add flutter client with clean architecture, ota and push notifications",
-  "updatedAt": "2026-11-16T06:18:06.641Z",
-  "timestamp": 1794809886641,
+  "changelog": "feat(frontend): expose dynamic /version.json route for OTA auto-updates",
+  "updatedAt": "2026-11-16T06:18:30.102Z",
+  "timestamp": 1794809910102,
   "downloadUrl": "https://frontend-production-424f.up.railway.app/downloads/lovesa-release.apk"
 }
