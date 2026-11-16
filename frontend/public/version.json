@@ -1,0 +1,12 @@
+{
+  "name": "Lovesa Mobile",
+  "slug": "lovesa-mobile",
+  "version": "1.0.0+2",
+  "versionCode": 2,
+  "versionName": "1.0.0",
+  "mandatory": true,
+  "changelog": "feat: add automated push anniversary notifications and turbo push release pipeline",
+  "updatedAt": "2026-11-16T06:10:26.136Z",
+  "timestamp": 1794809426136,
+  "downloadUrl": "https://frontend-production-424f.up.railway.app/downloads/lovesa-release.apk"
+}

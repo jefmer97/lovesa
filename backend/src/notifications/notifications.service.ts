@@ -164,8 +164,78 @@ export class NotificationsService implements OnModuleInit {
       await rem.save();
     }
 
-    // 2. Revisar actividades en las próximas 24 horas para usuarios con suscripción activa
     const distinctUsers = await this.subModel.distinct('userId').exec();
+
+    // 2. Comprobar Aniversarios de cada día 15 (Panamá UTC-5)
+    // - Notificación 48 horas antes (Día 13) para anticipar flor/regalo
+    // - Notificación el Día 15 a las 8:00 AM para celebrar
+    const panamaTimeStr = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Panama',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      hour12: false,
+    }).format(now);
+    // Parse "M/D/YYYY, H"
+    const [datePart, hourPart] = panamaTimeStr.split(', ');
+    const [pMonth, pDay, pYear] = (datePart || '').split('/').map((n) => parseInt(n, 10));
+    const pHour = parseInt(hourPart || '0', 10);
+
+    for (const uid of distinctUsers) {
+      const userIdStr = uid.toString();
+
+      // Día 13: Alerta preventiva 48h antes del aniversario del 15
+      if (pDay === 13 && pHour >= 8) {
+        const annivPreTag = `anniversary-pre-${pYear}-${pMonth}`;
+        const alreadyNotified = await this.reminderModel.findOne({ userId: userIdStr, title: annivPreTag }).exec();
+        if (!alreadyNotified) {
+          await this.reminderModel.create({
+            userId: userIdStr,
+            title: annivPreTag,
+            body: 'En 48 horas es su día 15 con Dei ❤️. Recuerda tener listo el detalle, flor o carta.',
+            remindAt: now,
+            sent: true,
+            isCompleted: true,
+            url: '/experiencias',
+          });
+          await this.sendPushToUser(userIdStr, {
+            title: '💐 ¡En 48h es su Aniversario con Dei (Día 15)!',
+            body: 'Prepara el detalle o sorpresa para celebrar el día 15 como ella lo merece ❤️',
+            url: '/experiencias',
+            tag: annivPreTag,
+          });
+        }
+      }
+
+      // Día 15: Alerta oficial del aniversario
+      if (pDay === 15 && pHour >= 8) {
+        const annivDayTag = `anniversary-day-${pYear}-${pMonth}`;
+        const alreadyNotified = await this.reminderModel.findOne({ userId: userIdStr, title: annivDayTag }).exec();
+        if (!alreadyNotified) {
+          // Calcular número de meses desde 15 agosto 2026
+          const monthsTogether = (pYear - 2026) * 12 + (pMonth - 8);
+          const mesTexto = monthsTogether > 0 ? `${monthsTogether}° Mes` : 'Aniversario';
+          await this.reminderModel.create({
+            userId: userIdStr,
+            title: annivDayTag,
+            body: `¡Hoy es su ${mesTexto} de Novios! Recuerda recordarle lo hermosa que es y consentirla.`,
+            remindAt: now,
+            sent: true,
+            isCompleted: true,
+            url: '/experiencias',
+          });
+          await this.sendPushToUser(userIdStr, {
+            title: `❤️ ¡Feliz ${mesTexto} de Aniversario con Dei!`,
+            body: 'Hoy cumplen otro mes juntos. Hazla sentir la reina de tu universo desde temprano ✨',
+            url: '/experiencias',
+            tag: annivDayTag,
+          });
+        }
+      }
+    }
+
+    // 3. Revisar actividades en las próximas 24 horas y alertar checklist PRE pendiente
     const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
     for (const uid of distinctUsers) {
@@ -184,10 +254,17 @@ export class NotificationsService implements OnModuleInit {
           .exec();
 
         if (!alreadyReminded) {
+          // Revisar si tiene checklist PRE de mitigación de riesgos con items pendientes
+          let pendingTasksNote = '';
+          const pendingChecks = act.datePlan?.pre?.mitigacionRiesgosChecklist?.filter((c: any) => !c.done);
+          if (pendingChecks && pendingChecks.length > 0) {
+            pendingTasksNote = ` Tienes ${pendingChecks.length} tarea(s) pendiente(s) en tu checklist PRE.`;
+          }
+
           await this.reminderModel.create({
             userId: userIdStr,
             title: autoTagTitle,
-            body: `Se acerca "${act.title}". ¡Asegúrate de tener todo listo para sorprender a Dei! ❤️`,
+            body: `Se acerca "${act.title}".${pendingTasksNote} ¡Asegúrate de tener todo listo! ❤️`,
             remindAt: now,
             sent: true,
             isCompleted: false,
@@ -196,7 +273,7 @@ export class NotificationsService implements OnModuleInit {
 
           await this.sendPushToUser(userIdStr, {
             title: `📅 ¡Se acerca tu cita con Dei!`,
-            body: `"${act.title}" está programada en las próximas 24 horas. ¡Revisa los detalles!`,
+            body: `"${act.title}" está programada en las próximas 24 horas.${pendingTasksNote}`,
             url: '/calendar',
             tag: `activity-${act._id}`,
           });
