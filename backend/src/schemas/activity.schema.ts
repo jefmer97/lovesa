@@ -30,8 +30,19 @@ export class Activity {
   @Prop({ type: Types.ObjectId, ref: 'Idea' })
   ideaId: string;
 
+  @Prop({
+    type: String,
+    enum: ['fuerte', 'suave', 'hito', 'recuerdo'],
+    default: 'fuerte',
+  })
+  planType: string;
+
+  @Prop({ type: Object, default: null })
+  datePlan: Record<string, any> | null;
+
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   userId: string;
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
+

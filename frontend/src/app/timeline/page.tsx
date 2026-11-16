@@ -161,11 +161,44 @@ export default function TimelinePage() {
                   <Typography display={{ xs: 'block', sm: 'none' }} color="textSecondary" variant="caption" sx={{ fontWeight: 'bold', mb: 1 }}>
                     {format(new Date(event.startDate), "d 'de' MMMM, yyyy", { locale: es })}
                   </Typography>
-                  <Typography variant="h6" fontWeight="bold" color="primary">{event.title}</Typography>
-                  {event.description && <Typography>{event.description}</Typography>}
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 0.5 }}>
+                    <Typography variant="h6" fontWeight="bold" color="primary">{event.title}</Typography>
+                    {event.planType && (
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          px: 1.2,
+                          py: 0.3,
+                          borderRadius: 1.5,
+                          fontWeight: 'bold',
+                          bgcolor: event.planType === 'fuerte' ? 'rgba(233, 30, 99, 0.2)' : 'rgba(59, 130, 246, 0.2)',
+                          color: event.planType === 'fuerte' ? '#f472b6' : '#60a5fa',
+                        }}
+                      >
+                        {event.planType === 'fuerte' ? '🔥 Cita Fuerte' : event.planType === 'suave' ? '☕ Cita Suave' : event.planType.toUpperCase()}
+                      </Typography>
+                    )}
+                  </Box>
+                  {event.description && <Typography sx={{ mb: 1 }}>{event.description}</Typography>}
+
+                  {event.datePlan?.diaD?.motivo?.detalles && (
+                    <Box sx={{ mt: 1.5, p: 1.5, bgcolor: 'rgba(233, 30, 99, 0.08)', borderRadius: 2, border: '1px solid rgba(233, 30, 99, 0.25)' }}>
+                      <Typography variant="caption" fontWeight="bold" color="secondary" display="block">
+                        📐 MATRIZ DÍA D ({Object.values(event.datePlan.diaD || {}).filter((v: any) => v?.detalles).length}/14 Pilares Configurados)
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Motivo:</strong> {event.datePlan.diaD.motivo.detalles}
+                      </Typography>
+                      {event.datePlan.diaD.objeto?.detalles && (
+                        <Typography variant="body2" color="text.secondary">
+                          <strong>Objeto/Detalle:</strong> {event.datePlan.diaD.objeto.detalles}
+                        </Typography>
+                      )}
+                    </Box>
+                  )}
                   
                   {event.notes && (
-                    <Box sx={{ mt: 2, p: 2, bgcolor: '#f9f9f9', borderRadius: 2 }}>
+                    <Box sx={{ mt: 2, p: 2, bgcolor: 'rgba(255,255,255,0.04)', borderRadius: 2 }}>
                       <Typography component="div" variant="body2" dangerouslySetInnerHTML={{ __html: event.notes }} />
                     </Box>
                   )}

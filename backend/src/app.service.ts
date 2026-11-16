@@ -367,10 +367,63 @@ export class AppService implements OnModuleInit {
         startDate: new Date('2026-10-31T19:30:00-05:00'),
         endDate: new Date('2026-10-31T23:59:00-05:00'),
         isAllDay: true,
+        planType: 'fuerte',
         notes: 'Disfraces: Lana Del Rey & The Weeknd. Playlist: El Incomprendido (Ismael Rivera) + Lust for Life / Stargirl Interlude / The Abyss.',
         media: [],
       },
+      {
+        title: '🚗⛰️ Escapada 3er Mes a Cerro Azul (Estreno Auto Nuevo)',
+        description:
+          'Cita Fuerte de 3er Aniversario (Martes 17 noche al Miércoles 18 de Noviembre): Subida a cabaña en Cerro Azul en el carro nuevo, noche de vino y frío ("Tú friita y yo calientito"), desayuno con neblina, Salón VIP (hacerle sus rizos) y paseo al Chorro El Vigía ($75–$95 total).',
+        startDate: new Date('2026-11-17T20:00:00-05:00'),
+        endDate: new Date('2026-11-18T17:00:00-05:00'),
+        isAllDay: false,
+        planType: 'fuerte',
+        notes: '<p><strong>Presupuesto Low-Cost VIP ($75–$95 total):</strong> Cabaña Airbnb en Cerro Azul ($45–$60) + Supermercado vino/cena/desayuno ($20–$25) + Gasolina del auto nuevo ($10).</p>',
+        media: [],
+        datePlan: {
+          pre: {
+            mindset: 'NO CELAR, NO EGO, NO PELEAR, NO DISCUTIR',
+            planear: 'Separar cabañita/Airbnb en Altos de Cerro Azul para el martes 17 en la noche ($45–$60) y comprar vino + cena/desayuno en el súper ($20–$25).',
+            definicionCita: 'Sorpresa',
+            presenciaEnLinea: 'Subir o enviarle algo lindo por nuestro 3er mes (15 de noviembre).',
+            atencionApoyo: 'Estar pendiente de su turno de inicio de semana y transmitirle tranquilidad.',
+            chistes: '"Allá arriba hace frío, así que tú friita y yo calientito ❄️🔥"',
+            cuidado: 'Abrirle la puerta del auto nuevo, llevarle abrigo extra y manejar suave.',
+            detallitos: 'Heladito de naranja-piña / snack favorito y flor en el asiento del copiloto.',
+            juegosPrevios: 'Decirle el lunes: "Mañana martes en la noche eres mía, alista abrigo que vamos a bautizar el carro nuevo".',
+            mitigacionRiesgosChecklist: [
+              { id: 'ca-1', text: 'Reservar cabaña/Airbnb en Cerro Azul con llegada autónoma (Martes 17 a Miércoles 18 Nov)', done: false },
+              { id: 'ca-2', text: 'Tanquear el auto nuevo ($10-$15) y revisar luces/llantas', done: false },
+              { id: 'ca-3', text: 'Comprar en el súper antes de subir: Vino tinto, pastas/picada de quesos y desayuno', done: false },
+              { id: 'ca-4', text: 'Comprar flor de 3er mes + escribir carta a mano', done: false },
+            ],
+          },
+          diaD: {
+            motivo: { detalles: 'Celebración 3er Mes de Novios + Bautizo del Auto Nuevo en Cerro Azul', proximaAccion: 'Confirmar hora de salida el martes' },
+            imagenMia: { detalles: 'Outfit casual elegante de montaña con abrigo rico, buen perfume y carro impecable', proximaAccion: 'Limpiar interior del auto nuevo' },
+            halagosTension1: { detalles: '"Feliz 3er mes reina de mi universo. Mira qué hermosa se ve mi novia estrenando el asiento de copiloto". Darle vueltita y tomarla de la espalda baja', proximaAccion: 'Recibirla afuera del auto y abrirle la puerta' },
+            inversionFemenina: { detalles: 'Que aliste su abrigo calientito y me ayude a hacer el desayuno en la cabaña', proximaAccion: 'Avisarle el lunes qué llevar' },
+            objeto: { detalles: 'Flores boutique en el asiento del copiloto + Carta escrita a mano', proximaAccion: 'Comprar flores el martes' },
+            tension2: { detalles: 'Mano en su pierna subiendo a Cerro Azul, miradas cómplices y sentir el aire frío al llegar a los pinos', proximaAccion: 'Bajar un poquito los vidrios en la montaña' },
+            comidaBebidas: { detalles: 'Cena íntima en cabaña (pastas/quesos + copa de vino) y desayuno con café viendo la neblina', proximaAccion: 'Pasar al supermercado antes de subir' },
+            inmortalizacion: { detalles: 'Fotos estrenando el auto nuevo, brindando con vino y en el mirador/Chorro El Vigía', proximaAccion: 'Grabar clips para el 1er Video Recap (Young & Beautiful)' },
+            actividadJuego: { detalles: 'Salón VIP (hacerle sus rizos en la mañana) + Paseo al Chorro El Vigía y Lago Goofy', proximaAccion: 'Pedirle que lleve sus cremas de rizos' },
+            musicaBaile: { detalles: 'Poner "El Incomprendido" al subir al auto y bailar lento abrazados en la cabaña', proximaAccion: 'Descargar playlist en Spotify' },
+            tension3: { detalles: 'Besos, caricias, juego de poder bajo las sábanas con el frío de montaña ("Tú friita y yo calientito")', proximaAccion: 'Luz tenue en la cabaña' },
+            talkSocialMedia: { detalles: 'Ver One Piece o reels graciosos acurrucados', proximaAccion: 'Tener episodios listos' },
+            palabrasDedicatoria: { detalles: 'Leerle la carta escrita a mano por los 3 meses juntos', proximaAccion: 'Escribirla a mano y tomarle foto para el álbum' },
+            socialStorytelling: { detalles: 'Hablar de nuestra historia, familia y próximos viajes en el carro nuevo', proximaAccion: 'Editar video recap' },
+          },
+          postDay: {
+            mensajeCierre: 'Decirle lo mágico que fue estrenar el carro nuevo con ella en Cerro Azul y despertar juntos en nuestro 3er mes.',
+            minivideoRecap: 'Hacer minivideo recap con "Young & Beautiful" y subirlo a Lovesa.',
+            proximaAccion: 'Planear la cita suave del viernes (heladito naranja-piña / Mr. Bono)',
+          },
+        },
+      },
     ];
+
 
     const initialIdeas = [
       // Ideas de Dei (inboxElla)
@@ -522,7 +575,50 @@ export class AppService implements OnModuleInit {
         timeframe: 'medium-term',
         isCompleted: false,
       },
+      {
+        title: 'Escapada 3er Mes a Cerro Azul estrenando el Auto Nuevo 🚗⛰️',
+        description:
+          'Plan de 3er Aniversario (Martes 17 noche a Miércoles 18 de Noviembre): Subir a cabaña en Cerro Azul en el carro nuevo, vino y frío de montaña ("Tú friita y yo calientito"), desayuno y paseo al Chorro El Vigía ($75–$95 total).',
+        timeframe: 'short-term',
+        isCompleted: false,
+      },
+      {
+        title: '1er Video Recap juntos (Young & Beautiful) 🎬🎶',
+        description:
+          'Del Google Sheet: Editar nuestro primer minivideo recap con los mejores clips y fotos juntos al ritmo de "Young & Beautiful" de Lana Del Rey.',
+        timeframe: 'short-term',
+        isCompleted: false,
+      },
+      {
+        title: 'Comprar ropa combinada en pareja 👕👚',
+        description:
+          'Del Google Sheet: Ir de compras o elegir outfits combinados en pareja.',
+        timeframe: 'short-term',
+        isCompleted: false,
+      },
+      {
+        title: 'Poner Candado en Amador 🔒❤️',
+        description:
+          'Del Google Sheet: Ir al Causeway de Amador a poner nuestro candado juntos con vista al mar.',
+        timeframe: 'short-term',
+        isCompleted: false,
+      },
+      {
+        title: 'Día de Pesca juntos 🎣🚤',
+        description:
+          'Del Google Sheet: Plan de aventura saliendo a un día de pesca juntos.',
+        timeframe: 'medium-term',
+        isCompleted: false,
+      },
+      {
+        title: 'Ver película de Dinosaurio juntos (Diciembre) 🦕🍿',
+        description:
+          'Del Google Sheet (Diciembre): Tarde/noche acurrucados viendo la película de Dinosaurio con snacks.',
+        timeframe: 'short-term',
+        isCompleted: false,
+      },
     ];
+
 
     let activitiesAdded = 0;
     for (const act of historicalActivities) {
